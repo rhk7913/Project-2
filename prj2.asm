@@ -71,7 +71,7 @@ sw $s0, 4($sp)
 #add single check for negative sign
 #add checkers for non numerical ascii values, break to input error return
 
-addi $t0, $gp, $a0 #set t0 to point to string
+add $t0, $gp, $a0 #set t0 to point to string
 addi $s0, $zero, 10 #set s0 to ten for mult 
 add $v0, $zero, $zero #set return value to zero
 lbu $t1, 0($t0) #load first byte in t1
@@ -87,7 +87,7 @@ mult $v0, $s0 #v0 times 10
 #check to see if high is greater than zero
 mfhi $t3 #move high register into t3
 slt $t4, $zero, $t3 
-beq $t4, $zero, errorReturn #jump to errorReturn if there is overflow in register
+bne $t4, $zero, errorReturn #jump to errorReturn if there is overflow in register
 mflo $v0 #move product into v0 
 addi $t2, $t1, -48 #t2 decimal value of number
 add $v0, $v0, $t2 #add value of byte into v0
@@ -100,8 +100,8 @@ j load
 #set s7 to 1 if a number is negative
 negative:
 addi $s7, $zero, 1 #set boolean s7 to one
-j checked #jump to second line of loop
-
+addi $t0, $t0, 1 #incrument gp pointer
+j load #jump to load
 
 #put signed int in v0 and return
 stringDone:
@@ -122,7 +122,7 @@ jr $ra
 
 #if error return -1
 errorReturn: 
-addi v0, $zero, -1
+addi $v0, $zero, -1
 #restore stack and quit
 lw $ra, 0($sp)
 lw $s0, 4($sp)
