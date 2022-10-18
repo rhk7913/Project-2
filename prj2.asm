@@ -73,4 +73,10 @@ stringDone:
 
 #if error in input return errorString
 errorReturn: 
-
+la $a0, errorString #load string in a0
+addi $v0, $zero, 4 #syscall for print string
+syscall
+#restore stack and quit
+lw $ra, 0($sp)
+addi $sp, $sp, 4
+jr $ra
