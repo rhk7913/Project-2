@@ -78,6 +78,7 @@ lbu $t1, 0($t0) #load first byte in t1
 beq $t1, 45, negative #if first byte is equal to - jump to negative
 j checked #if not jump into second line of loop
 
+#check to see if there is non numerical characters
 load:
 lbu $t1, 0($t0) #load byte from string in t1
 checked:
