@@ -16,7 +16,7 @@ store count as n
 	b. count = count - 1
 5. If count = 0, end the algorithm
 
-Program steps to compute booth's algorithm
+Program steps to compute booth's algorithm: see page 4 in the project pdf
 1. First take the multiplicand input
 	a. If it is not valid, print an error and return
 	b. If it is valid, take the multiplier input
