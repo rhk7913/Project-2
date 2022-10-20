@@ -1,22 +1,19 @@
-Booth's algorithm steps:
+Booth's algorithm steps: see the Booth's Algorithm Flowchart.png file
+
 1. Store A as 0, Q of -1 as 0 (stores each bit shifted off from the multiplier), M is the multiplicand, Q as the multiplier, 
 store count as n
 * Need to concatenate to build a long register *
-
 2. If Q of 0 and Q of -1 equals 10 (start a sequence of 1's)
 	a. A = A - M (negative multiplicand)
 	b. Arithmetic shift right: A, Q, Q of -1
 	c. count = count - 1
-
 3. If Q of 0 and Q of -1 equals 01 (end of a sequence of 1's)
 	a. A = A + M (positive multiplicand)
 	b. Arithmetic shift right: A, Q, Q of -1
 	c. count = count - 1
-
 4. If Q of 0 and Q of -1 equals 11 or 00 (no transitions)
 	a. Arithmetic shift right: A, Q, Q of -1
 	b. count = count - 1
-
 5. If count = 0, end the algorithm
 
 Program steps to compute booth's algorithm
@@ -27,4 +24,3 @@ Program steps to compute booth's algorithm
 	a. If it is valid, print the formatted multiplicand and multiplier
 3. Compute booth's algorithm (see steps above) and print intermediate results
 4. Print the formated final product and return
- 
