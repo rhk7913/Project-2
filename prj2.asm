@@ -47,6 +47,11 @@ jal signedStringConversion #returns something in v0
 beq $v0, -1, returnError #if input error than return error
 add $s1, $v0, $zero #s1 is equal to return value (s1 = multiplier)
 
+#restore stack and exit main
+lw $ra, 0($sp)
+addi $sp, $sp, 4
+jr $ra
+
 
 returnError:
 la $a0, errorString #load string in a0
@@ -58,8 +63,7 @@ addi $sp, $sp, 4
 jr $ra
 
 
-#retuns signed int in v0, returns error if overflow, takes argument a0 which is how far the string is from the stack pointer
-#returns -1 if there is an error
+#retuns signed int in v0, returns -1 if input error, takes argument a0 which is how far the string is from the stack pointer
 #uses s7 as a boolean value
 signedStringConversion:
 
@@ -71,6 +75,7 @@ sw $s0, 4($sp)
 #add single check for negative sign
 #add checkers for non numerical ascii values, break to input error return
 
+add $s7, $zero, $zero #set s7 to zero
 add $t0, $gp, $a0 #set t0 to point to string
 addi $s0, $zero, 10 #set s0 to ten for mult 
 add $v0, $zero, $zero #set return value to zero
