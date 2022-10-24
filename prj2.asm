@@ -142,7 +142,7 @@ load:
 lbu $t1, 0($t0) #load byte from string in t1
 checked:
 beq $t1, 10, stringDone #checked to see if the string is done
-slti $t4, $t1, 49 #if byte is less than 49 return 1
+slti $t4, $t1, 48 #if byte is less than 49 return 1
 beq $t4, 1, errorReturn #jump to errorReturn is there is a ascii value less than 32 but not 10
 slti $t4, $t1, 58 #if the current byte is less than 58 return 1
 beq $t4, $zero, errorReturn #if byte is greater than 58 return error
