@@ -231,6 +231,11 @@ srl $a1, $a1, 1 #shift Q by one
 beq $t1, 1, shiftOne
 
 #print bits
+
+la $a0, spaceString #load string in a0
+addi $v0, $zero, 4 #syscall for print string
+syscall
+
 addi $sp, $sp, -4
 sw $a0, 0($sp) #protect stack and store a0
 add $a0, $s0, $zero #put A in arugment
@@ -262,6 +267,11 @@ shiftOne:
 or $a1, $a1, 2147483648  #add 1 in the last bit of q
 
 #print bits
+
+la $a0, spaceString #load string in a0
+addi $v0, $zero, 4 #syscall for print string
+syscall
+
 addi $sp, $sp, -4
 sw $a0, 0($sp) #protect stack and store a0
 add $a0, $s0, $zero #put A in arugment
