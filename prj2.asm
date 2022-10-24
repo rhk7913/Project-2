@@ -232,12 +232,13 @@ beq $t1, 1, shiftOne
 
 #print bits
 
+addi $sp, $sp, -4
+sw $a0, 0($sp) #protect stack and store a0
+
 la $a0, spaceString #load string in a0
 addi $v0, $zero, 4 #syscall for print string
 syscall
 
-addi $sp, $sp, -4
-sw $a0, 0($sp) #protect stack and store a0
 add $a0, $s0, $zero #put A in arugment
 jal printBits #call printBits
 
@@ -268,12 +269,13 @@ or $a1, $a1, 2147483648  #add 1 in the last bit of q
 
 #print bits
 
+addi $sp, $sp, -4
+sw $a0, 0($sp) #protect stack and store a0
+
 la $a0, spaceString #load string in a0
 addi $v0, $zero, 4 #syscall for print string
 syscall
 
-addi $sp, $sp, -4
-sw $a0, 0($sp) #protect stack and store a0
 add $a0, $s0, $zero #put A in arugment
 jal printBits #call printBits
 
@@ -314,9 +316,12 @@ jr $ra
 
 printBits:
 #protect stack
-addi $sp, $sp, -8
+addi $sp, $sp, -20
 sw $ra, ($sp)
 sw $v0, 4($sp) 
+sw $t0, 8($sp)
+sw $t1, 12($sp)
+sw $t2, 16($sp)
 
 addi $t1, $zero, 1 #sets incrumenter to 1
 addi $v0, $zero, 1 #sets syscall value to print int
@@ -347,5 +352,8 @@ procDone:
 #restore stack and return
 lw $ra, 0($sp)
 lw $v0, 4($sp)
-addi $sp, $sp, 8
+lw $t0, 8($sp)
+lw $t1, 12($sp)
+lw $t2, 16($sp)
+addi $sp, $sp, 20
 jr $ra
