@@ -84,6 +84,7 @@ syscall
 add $a0, $s0, $zero
 add $a1, $s1, $zero
 jal booths
+add $t0, $v0, $zero #put v0 in temp register
 
 la $a0, lineString
 addi $v0, $zero, 4 #syscall for print string
@@ -93,7 +94,7 @@ la $a0, spaceString #load string in a0
 addi $v0, $zero, 4 #syscall for print string
 syscall
 
-add $a0, $v0, $zero #set high register as input
+add $a0, $t0, $zero #set high register as input
 jal printBits
 add $a0, $v1, $zero #set low register as input
 jal printBits
