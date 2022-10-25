@@ -26,6 +26,12 @@ addi $a1, $zero, 15 #set string length to 15
 addi $v0, $zero, 8 # 8 syscall code for reading string
 syscall
 
+#transfer first string into int and put in register s0 (multicand)
+addi $a0, $zero, 4 
+jal signedStringConversion #returns something in v0
+beq $v0, -1, returnError #if input error than return error
+add $s0, $v0, $zero #s0 is equal to return value (s0 = multicand)
+
 #string 1 is stored 1 byte away from gp
 
 #parse string 2 (multiplier) from console
@@ -38,12 +44,6 @@ syscall
 
 #add single check for negative sign
 #add checkers for non numerical ascii values, break to input error return
-
-#transfer first string into int and put in register s0 (multicand)
-addi $a0, $zero, 4 
-jal signedStringConversion #returns something in v0
-beq $v0, -1, returnError #if input error than return error
-add $s0, $v0, $zero #s0 is equal to return value (s0 = multicand)
 
 #transfer second string into int and put in register s1 (multiplier)
 addi $a0, $zero, 72 
@@ -136,6 +136,7 @@ addi $s0, $zero, 10 #set s0 to ten for mult
 add $v0, $zero, $zero #set return value to zero
 lbu $t1, 0($t0) #load first byte in t1
 beq $t1, 45, negative #if first byte is equal to - jump to negative
+beq $t1, 10, errorReturn #if first byte is ten (empty string) return error
 j checked #if not jump into second line of loop
 
 #check to see if there is non numerical characters
@@ -161,6 +162,7 @@ j load
 
 #check output for overflow (hint use high low)
 
+#checks unsigned v0 to see if it needs to stay neg max or return error for post. overflow
 checkNeg:
 bne $s7, 1, errorReturn
 #restore stack and return
