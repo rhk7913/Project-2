@@ -155,11 +155,19 @@ bne $t4, $zero, errorReturn #jump to errorReturn if there is overflow in registe
 mflo $v0 #move product into v0 
 addi $t2, $t1, -48 #t2 decimal value of number
 addu $v0, $v0, $t2 #add value of byte into v0
-beq $v0, 2147483648, errorReturn #if number is greater than unsigned return false
 addi $t0, $t0, 1 #incrument gp pointer
+beq $v0, 2147483648, checkNeg
 j load
 
 #check output for overflow (hint use high low)
+
+checkNeg:
+bne $s7, 1, errorReturn
+#restore stack and return
+lw $ra, 0($sp)
+lw $s0, 4($sp)
+addi $sp, $sp, 8
+jr $ra
 
 
 #set s7 to 1 if a number is negative
