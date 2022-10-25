@@ -154,7 +154,8 @@ slt $t4, $zero, $t3
 bne $t4, $zero, errorReturn #jump to errorReturn if there is overflow in register
 mflo $v0 #move product into v0 
 addi $t2, $t1, -48 #t2 decimal value of number
-add $v0, $v0, $t2 #add value of byte into v0
+addu $v0, $v0, $t2 #add value of byte into v0
+beq $v0, 2147483648, errorReturn #if number is greater than unsigned return false
 addi $t0, $t0, 1 #incrument gp pointer
 j load
 
@@ -165,7 +166,9 @@ j load
 negative:
 addi $s7, $zero, 1 #set boolean s7 to one
 addi $t0, $t0, 1 #incrument gp pointer
-j load #jump to load
+lbu $t1, 0($t0) #load byte from string in t1
+beq $t1, 10, errorReturn #if the next byte is a end string return error 
+j checked #jump to load
 
 #put signed int in v0 and return
 stringDone:
@@ -324,30 +327,20 @@ sw $t0, 8($sp)
 sw $t1, 12($sp)
 sw $t2, 16($sp)
 
-addi $t1, $zero, 1 #sets incrumenter to 1
+add $t0, $zero, $zero #sets incrumenter to 0
 addi $v0, $zero, 1 #sets syscall value to print int
+
 bitLoop:
-and $t0, $a0, 1 #get last bit of a in t0
-sll $t2, $t1, 4 #get address by x 4
-add $t2, $t2, $gp #get address of bit from gp
-sw $t0, 0($t2) #store bit in table from gp
-addi $t1, $t1, 1 #incrument t1 by 1
-srl $a0, $a0, 1 #shift a0 by one bit
-beq $t1, 33, loadDone #if 32 bits loaded, done loading bits
-j bitLoop
-
-loadDone:
-addi $t1, $t1, -1 #decrement t1 by one to get to 32
-
-looper:
-sll $t0, $t1, 4  
-add $t0, $t0, $gp #get address of xth bit
-lw $t2, 0($t0) #load xth bit
-add $a0, $t2, $zero #set syscall input to loaded bit
-syscall 
-addi $t1, $t1, -1 #decrement t1 
-beq $t1, $zero, procDone
-j looper
+and $t1, $a0, 2147483648 #load last bit of a0
+srl $t1, $t1, 31 #shift bit to first bit 
+add $t2, $a0, $zero #set t2 to a0
+add $a0, $t1, $zero #set a0 to last bit of input
+syscall
+add $a0, $t2, $zero #set a0 back to input
+sll $a0, $a0, 1 #shift a0 one bit to the left
+addi $t0, $t0, 1 #incrument t0 by one
+beq $t0, 32, procDone #if 32 bits loaded done with proc
+j bitLoop #if not loop
 
 procDone:
 #restore stack and return
